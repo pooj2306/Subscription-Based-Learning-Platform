@@ -1,0 +1,1 @@
+These are dummy notes for 'Models and Migrations' in course 'Django Web Development'.

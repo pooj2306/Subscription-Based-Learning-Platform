@@ -1,0 +1,1 @@
+These are dummy notes for 'Building REST APIs' in course 'Django Web Development'.

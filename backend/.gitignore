@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.env
+rzp-key.csv
+db.sqlite3
+media/
+staticfiles/
+*.log
+.vscode/

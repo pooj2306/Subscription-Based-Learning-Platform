@@ -1,0 +1,1 @@
+These are dummy notes for 'Loops and Conditionals' in course 'Python for Beginners'.
