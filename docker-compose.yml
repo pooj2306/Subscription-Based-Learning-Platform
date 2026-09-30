@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: sblp_db
+      MYSQL_ROOT_PASSWORD: rootpassword123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      SECRET_KEY: django-insecure-docker-dev-key-change-me
+      DEBUG: "True"
+      DB_NAME: sblp_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword123
+      DB_HOST: db
+      DB_PORT: 3306
+      CELERY_BROKER_URL: redis://localhost:6379/0
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  mysql_data:
