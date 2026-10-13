@@ -34,6 +34,12 @@ def grade_quiz_attempt(attempt, answers_data):
             is_correct=is_correct,
         )
 
+        try:
+            from adaptive_learning.services import record_question_outcome
+            record_question_outcome(attempt.student, question, is_correct)
+        except Exception:
+            pass
+
     percentage = round((score / total_marks) * 100, 2) if total_marks > 0 else 0.0
     passed = percentage >= attempt.quiz.pass_percentage
 

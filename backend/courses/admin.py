@@ -24,7 +24,9 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ['title', 'course', 'order', 'duration_minutes']
+    list_display = ['order', 'title', 'module_name', 'course', 'duration_minutes']
+    list_filter = ['course', 'module_name']
+    search_fields = ['title', 'module_name']
     inlines = [MaterialInline]
 
 

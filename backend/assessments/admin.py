@@ -5,6 +5,16 @@ from django.contrib import admin
 from .models import Quiz, Question, Choice, QuizAttempt, StudentAnswer
 
 
+from adaptive_learning.models import AdaptiveQuestion
+
+
+class AdaptiveQuestionInline(admin.StackedInline):
+    model = AdaptiveQuestion
+    can_delete = False
+    max_num = 1
+    extra = 1
+
+
 class ChoiceInline(admin.TabularInline):
     model = Choice
     extra = 2
@@ -25,7 +35,7 @@ class QuizAdmin(admin.ModelAdmin):
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ['text', 'quiz', 'marks', 'order']
-    inlines = [ChoiceInline]
+    inlines = [AdaptiveQuestionInline, ChoiceInline]
 
 
 @admin.register(Choice)

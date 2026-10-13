@@ -39,7 +39,7 @@ class QuizTakeView(generics.RetrieveAPIView):
 
 
 class SubmitQuizView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, HasActiveSubscription]
 
     def post(self, request, pk):
         quiz = get_object_or_404(Quiz, pk=pk)

@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'assessments',
     'certificates',
     'dashboard',
+    'adaptive_learning',
+    'engagement',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +144,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
@@ -169,8 +173,12 @@ CORS_ALLOWED_ORIGINS = [
 
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = env('CELERY_BROKER_URL', default='redis://localhost:6379/0')
-'rest_framework_simplejwt.token_blacklist',
+# 'rest_framework_simplejwt.token_blacklist', (already in INSTALLED_APPS above)
 
 
 RAZORPAY_KEY_ID = env('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = env('RAZORPAY_KEY_SECRET')
+
+# Subscription & Course Access Policies
+# When True, pausing a subscription stops access to owned courses (CoursePurchase) as well as subscription courses
+PAUSE_STOPS_OWNED_COURSE_ACCESS = True

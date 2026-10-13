@@ -22,6 +22,27 @@ class UpdateLessonProgressView(APIView):
 
         lesson = get_object_or_404(Lesson, id=data['lesson_id'])
 
+        if lesson.course.requires_subscription and request.user.role == 'STUDENT':
+            from django.conf import settings
+            from subscriptions.models import Subscription, CoursePurchase
+
+            has_active_sub = Subscription.objects.filter(student=request.user, status='ACTIVE').exists() and any(
+                sub.is_active for sub in Subscription.objects.filter(student=request.user, status='ACTIVE')
+            )
+            has_paused_sub = Subscription.objects.filter(student=request.user, status=Subscription.Status.PAUSED).exists()
+            pause_stops_owned = getattr(settings, 'PAUSE_STOPS_OWNED_COURSE_ACCESS', True)
+
+            if has_paused_sub and not has_active_sub and pause_stops_owned:
+                return Response(
+                    {"detail": "Your subscription is currently paused. Please resume your subscription to update course progress."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            if not has_active_sub and not CoursePurchase.objects.filter(student=request.user, course=lesson.course).exists():
+                return Response(
+                    {"detail": "An active subscription or course purchase is required to update progress."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
         progress, _ = LessonProgress.objects.get_or_create(
             student=request.user,
             lesson=lesson,

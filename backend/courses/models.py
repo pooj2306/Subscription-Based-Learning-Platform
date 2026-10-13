@@ -25,6 +25,8 @@ class Course(models.Model):
 
     is_published = models.BooleanField(default=False)          # visibility control
     requires_subscription = models.BooleanField(default=True)  # SRS 4.3 - visibility based on subscription rules
+    is_premium = models.BooleanField(default=False)            # Flag for premium specialized track
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=499.00)  # Pay-per-course direct price
 
     thumbnail = models.ImageField(upload_to='course_thumbnails/', blank=True, null=True)
 
@@ -37,11 +39,13 @@ class Course(models.Model):
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
+    module_name = models.CharField(max_length=255, blank=True, default='')
     title = models.CharField(max_length=255)
     order = models.PositiveIntegerField(default=0)  # sequence within course
 
     video_url = models.URLField(blank=True, null=True)   # streamed video (SRS 4.4)
     video_file = models.FileField(upload_to='lesson_videos/', blank=True, null=True)
+    notes = models.TextField(blank=True, default='')     # online study notes & code examples
 
     duration_minutes = models.PositiveIntegerField(default=0)
 
